@@ -2,9 +2,14 @@
   "name": "html2pug",
   "version": "0.0.0",
   "description": "Converts HTML to Pug",
-  "main": "src/index.js",
+  "main": "lib/index.js",
+  "bin": {
+    "html2pug": "lib/cli.js"
+  },
   "dependencies": {
-    "jsdom": "^8.0.2"
+    "htmlclean": "^2.7.7",
+    "jsdom": "^8.0.2",
+    "minimist": "^1.2.0"
   },
   "devDependencies": {},
   "scripts": {
