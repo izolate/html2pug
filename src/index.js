@@ -1,85 +1,24 @@
 'use strict'
 
 const jsdom = require('jsdom')
-const co = require('co')
-const each = require('co-each')
-
-const html = `<h1><span>Foo</span></h1><ul><!-- test --><li>one</li><li>two</li><li>three</li></ul>`
+const html = `<h1 id='header'><span>foo</span></h1><ul class='list'><!-- test --><li data-id='1'>one</li><li>two</li><li>three</li></ul>`
 
 const document = jsdom.jsdom()
 const window = document.defaultView
 const template = document.createElement('template')
 template.innerHTML = html
 
-//let final = []
 let pug = ''
 let i = 0
-
-function * walks (currentNode) {
-  console.log('- - - - - - - - - -')
-  console.log(`ROUND ${++i}:\n `, currentNode, `[${currentNode.length}]`)
-
-  if (currentNode instanceof window.NodeList) {
-    yield each ([].slice.call(currentNode), function * (node) {
-
-      if (node.childNodes.length) {
-        console.log(`  <${node.tagName}> has children`)
-        yield walk(node.childNodes)
-      }
-
-      else {
-        console.log('  no children')
-        //pug += node.tagName.toLowerCase()
-      }
-    })
-  }
-}
-
-
-const forEach = (nodeList, fn) => [].map.call(nodeList, fn)
-
-/*
-co(function * () {
-  const files = yield walk(template.content.childNodes)
-  return pug
-})
-  .then(ok => {
-    console.log(final)
-    console.log(pug)
-    console.log(ok)
-  })
-  .catch(err => console.log(err.stack))
-*/
-
-/*
-const walk = require('tree-walk')
-walk.preorder(template.content.childNodes, (value, key, parent) => {
-  console.log('-----------')
-  console.log('parent', parent)
-  console.log(key, value)
-})
- */
-
-/*
-const walk = require('dom-walk')
-walk(template.content.childNodes, (node) => {
-  console.log(node)
-})
-*/
-
-let final = ''
 
 // Depth-first search in pre-order
 function * treeTraversal (tree, parent, level) {
   if (!tree) return
 
-  console.log('--------')
-  //console.log('Parent: ', parent)
-  console.log('Level: ', level)
-
   for (let i = 0; i < tree.length; i++) {
     const node = tree[i]
-    final += `\n${'  '.repeat(level)}${node.tagName}`
+    pug += `\n${'  '.repeat(level)}${parseNode(node)}`
+
     yield { node, parent, level }
 
     if (node.childNodes.length) {
@@ -88,13 +27,40 @@ function * treeTraversal (tree, parent, level) {
   }
 }
 
+function parseNode (node) {
+  if (node instanceof window.Text) return `| ${node.textContent}`
+
+  else if (node instanceof window.Comment)
+    return `//${node.textContent}`
+
+  else if (node.tagName) {
+    return setAttributes(node)
+  }
+
+  else return node
+}
+
+function setAttributes (node) {
+  let str = node.tagName.toLowerCase()
+
+  // Add ID
+  if (node.id) str += `#${node.id}`
+
+  // Adds Class
+  if (node.classList.length)
+    for (var cls in node.classList)
+      str += `.${node.classList[cls]}`
+
+  return str
+}
+
+
 const walk = treeTraversal(template.content.childNodes, null, 0)
 let it = walk.next()
 
 while (!it.done) {
-  console.log(it.value)
   it = walk.next()
 }
 
-console.log(final)
+console.log(pug)
 
