@@ -1,7 +1,7 @@
 'use strict'
 
 const jsdom = require('jsdom')
-const html = `<h1 id='header'><span>foo</span></h1><ul class='list'><!-- test --><li data-id='1'>one</li><li>two</li><li>three</li></ul>`
+const html = `<h1 id='header'><span>foo</span></h1><ul class='list'><!--test--><li data-id='1'>one</li><li>two</li><li>three</li></ul>`
 
 const document = jsdom.jsdom()
 const window = document.defaultView

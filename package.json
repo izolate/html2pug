@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "description": "Converts HTML to Pug",
   "main": "src/index.js",
-  "dependencies": {},
+  "dependencies": {
+    "jsdom": "^8.0.2"
+  },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
