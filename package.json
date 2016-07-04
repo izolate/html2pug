@@ -7,6 +7,7 @@
     "html2pug": "lib/cli.js"
   },
   "dependencies": {
+    "arrify": "^1.0.1",
     "html-minifier": "^1.1.1",
     "minimist": "^1.2.0",
     "parse5": "^2.1.5"
