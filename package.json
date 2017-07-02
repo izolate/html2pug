@@ -9,16 +9,26 @@
   "dependencies": {
     "arrify": "^1.0.1",
     "html-minifier": "^1.1.1",
-    "lint-staged": "^4.0.0",
     "minimist": "^1.2.0",
-    "parse5": "^2.1.5",
+    "parse5": "^2.1.5"
+  },
+  "devDependencies": {
+    "eslint": "^4.1.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.14.2",
+    "lint-staged": "^4.0.0",
     "prettier-standard": "^6.0.0"
   },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "prettier-standard 'src/**/*.js'",
-    "precommit": "lint-staged"
+    "standard": "prettier-standard 'src/**/*.js'",
+    "lint": "eslint src",
+    "precommit": "lint-staged",
+    "prepush": "npm run lint"
   },
   "lint-staged": {
     "*.js": [

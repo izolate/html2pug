@@ -2,7 +2,6 @@
 
 'use strict'
 
-const pkg = require('../package.json')
 const argv = require('minimist')(process.argv.slice(2))
 const html2pug = require('./index')
 const fs = require('fs')
