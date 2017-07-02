@@ -62,37 +62,44 @@ class Parser {
     } else if (treeAdapter.isElementNode(node)) {
       let line = `${indentation}${this.setAttributes(node)}`
 
-      if (this.isUniqueTextNode(node)) line += ` ${node.childNodes[0].value}`
+      if (this.isUniqueTextNode(node)) {
+        line += ` ${node.childNodes[0].value}`
+      }
 
       return line
-    } else return node
+    } else {
+      return node
+    }
   }
 
   setAttributes (node) {
     const { tagName, attrs: attributes } = node
-
-    let pugNode = tagName === 'div' ? '' : tagName
     const attributeList = []
-    const classList = []
+    let pugNode = tagName
 
     attributes.forEach(({ name, value }) => {
+      let hasClass = false
+      let hasId = false
+
       switch (name) {
         case 'id':
+          hasId = true
           pugNode += `#${value}`
           break
-        case undefined:
         case 'class':
-          classList.push(...value.split(' '))
+          hasClass = true
+          pugNode += `.${value.split(' ').join('.')}`
           break
         default:
           attributeList.push(`${name}='${value}'`)
           break
       }
-    })
 
-    if (classList.length) {
-      pugNode += `.${classList.join('.')}`
-    }
+      // Remove div tagName
+      if (tagName === 'div' && (hasId || hasClass)) {
+        pugNode = pugNode.replace('div', '')
+      }
+    })
 
     if (attributeList.length) {
       pugNode += `(${attributeList.join(', ')})`
