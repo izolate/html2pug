@@ -69,32 +69,36 @@ class Parser {
   }
 
   setAttributes (node) {
-    let str = node.tagName === 'div' ? '' : node.tagName
-    let attributes = []
-    let classList = []
+    const { tagName, attrs: attributes } = node
 
-    // Adds #id and .class
-    if (node.id) str += `#${node.id}`
+    let pugNode = tagName === 'div' ? '' : tagName
+    const attributeList = []
+    const classList = []
 
-    for (let a = 0; a < node.attrs.length; a++) {
-      const attr = node.attrs[a]
-
-      switch (attr.name) {
-        case undefined:
+    attributes.forEach(({ name, value }) => {
+      switch (name) {
         case 'id':
+          pugNode += `#${value}`
+          break
+        case undefined:
         case 'class':
-          classList = attr.value.split(' ')
+          classList.push(...value.split(' '))
           break
         default:
-          attributes.push(`${attr.name}='${attr.value}'`)
+          attributeList.push(`${name}='${value}'`)
           break
       }
+    })
+
+    if (classList.length) {
+      pugNode += `.${classList.join('.')}`
     }
 
-    if (classList.length) str += `.${classList.join('.')}`
-    if (attributes.length) str += `(${attributes.join(', ')})`
+    if (attributeList.length) {
+      pugNode += `(${attributeList.join(', ')})`
+    }
 
-    return str
+    return pugNode
   }
 
   // Identify Node type
