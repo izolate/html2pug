@@ -4,10 +4,8 @@ const minify = require('html-minifier').minify
 const parse5 = require('parse5')
 const Parser = require('./parser')
 
-module.exports = (html, opts) => {
-  opts = opts || {}
-
-  html = minify(html, {
+module.exports = async (sourceHtml, opts = {}) => {
+  const html = minify(sourceHtml, {
     removeEmptyAttributes: true,
     collapseWhitespace: true,
     caseSensitive: true
@@ -18,6 +16,12 @@ module.exports = (html, opts) => {
     ? parse5.parseFragment(html)
     : parse5.parse(html)
 
-  const parser = new Parser(document, opts)
-  return parser.parse().then(pug => pug)
+  const parser = new Parser(document)
+
+  try {
+    const pug = await parser.parse()
+    return pug
+  } catch (err) {
+    throw err
+  }
 }

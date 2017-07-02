@@ -3,13 +3,13 @@
 const treeAdapter = require('parse5').treeAdapters.default
 
 class Parser {
-  constructor (root, opts) {
+  constructor (root) {
     this.root = root
     this.pug = ''
   }
 
   parse () {
-    return new Promise((yep, nope) => {
+    return new Promise((resolve, reject) => {
       const walk = this.walk(this.root.childNodes, 0)
       let it
 
@@ -17,7 +17,7 @@ class Parser {
         it = walk.next()
       } while (!it.done)
 
-      yep(this.pug.substring(1))
+      resolve(this.pug.substring(1))
     })
   }
 

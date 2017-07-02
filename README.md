@@ -6,5 +6,5 @@ Node.js 5.0+ minimum. Uses depth-first search for DOM tree traversal, and ES6 ge
 ## Early stages. Very experimental.
 
 ```
-node lib/cli.js -f /path/to/file.html
+node src/cli.js -f /path/to/file.html
 ```
