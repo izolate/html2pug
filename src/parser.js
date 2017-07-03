@@ -9,16 +9,14 @@ class Parser {
   }
 
   parse () {
-    return new Promise((resolve, reject) => {
-      const walk = this.walk(this.root.childNodes, 0)
-      let it
+    const walk = this.walk(this.root.childNodes, 0)
+    let it
 
-      do {
-        it = walk.next()
-      } while (!it.done)
+    do {
+      it = walk.next()
+    } while (!it.done)
 
-      resolve(this.pug.substring(1))
-    })
+    return this.pug.substring(1)
   }
 
   /**

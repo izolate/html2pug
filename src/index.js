@@ -17,11 +17,5 @@ module.exports = async (sourceHtml, opts = {}) => {
     : parse5.parse(html)
 
   const parser = new Parser(document)
-
-  try {
-    const pug = await parser.parse()
-    return pug
-  } catch (err) {
-    throw err
-  }
+  return parser.parse()
 }
