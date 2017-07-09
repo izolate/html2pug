@@ -13,7 +13,6 @@ module.exports = async (sourceHtml, opts = {}) => {
     caseSensitive: true
   })
 
-  console.log(html)
   // Server-side
   const document = opts.fragment
     ? parse5.parseFragment(html)
