@@ -37,3 +37,6 @@ node_modules
 
 # Test
 test.*
+
+# Vim
+*.swp

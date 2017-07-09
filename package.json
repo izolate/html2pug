@@ -1,19 +1,40 @@
 {
   "name": "html2pug",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Converts HTML to Pug",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "bin": {
-    "html2pug": "lib/cli.js"
+    "html2pug": "src/cli.js"
   },
   "dependencies": {
-    "html-minifier": "^1.1.1",
-    "jsdom": "^8.0.2",
-    "minimist": "^1.2.0"
+    "arrify": "^1.0.1",
+    "html-minifier": "^3.5.2",
+    "minimist": "^1.2.0",
+    "parse5": "^2.1.5"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint": "^4.1.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.14.2",
+    "lint-staged": "^4.0.0",
+    "prettier-standard": "^6.0.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "standard": "prettier-standard 'src/**/*.js'",
+    "lint": "eslint src",
+    "precommit": "lint-staged",
+    "prepush": "npm run lint"
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier-standard",
+      "git add"
+    ]
   },
   "repository": {
     "type": "git",
