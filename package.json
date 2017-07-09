@@ -7,10 +7,10 @@
     "html2pug": "src/cli.js"
   },
   "dependencies": {
-    "arrify": "^1.0.1",
+    "get-stdin": "^5.0.1",
     "html-minifier": "^3.5.2",
-    "minimist": "^1.2.0",
-    "parse5": "^2.1.5"
+    "parse5": "^2.1.5",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
     "eslint": "^4.1.1",
