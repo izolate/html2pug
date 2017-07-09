@@ -8,9 +8,12 @@ module.exports = async (sourceHtml, opts = {}) => {
   const html = minify(sourceHtml, {
     removeEmptyAttributes: true,
     collapseWhitespace: true,
+    collapseBooleanAttributes: true,
+    collapseInlineTagWhitespace: true,
     caseSensitive: true
   })
 
+  console.log(html)
   // Server-side
   const document = opts.fragment
     ? parse5.parseFragment(html)
