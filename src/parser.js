@@ -1,6 +1,9 @@
-'use strict'
-
-const treeAdapter = require('parse5').treeAdapters.default
+const {
+  isDocumentTypeNode,
+  isTextNode,
+  isElementNode,
+  isCommentNode
+} = require('parse5').treeAdapters.default
 
 class Parser {
   constructor (root) {
@@ -27,7 +30,9 @@ class Parser {
    * @param {Number} level - Current tree level
    */
   * walk (tree, level) {
-    if (!tree) return
+    if (!tree) {
+      return
+    }
 
     for (let i = 0; i < tree.length; i++) {
       const node = tree[i]
@@ -44,21 +49,31 @@ class Parser {
     }
   }
 
-  parseNode (node, level) {
-    const indentation = '  '.repeat(level)
+  parseComment (node, indent) {
+    const comment = node.data.split('\n')
 
-    if (treeAdapter.isDocumentTypeNode(node)) {
-      return `${indentation}doctype html`
+    // Differentiate single line to multi-line comments
+    if (comment.length > 1) {
+      const multiLine = comment.map(line => `  ${line}`).join('\n')
+      return `${indent}//${multiLine}`
+    } else {
+      return `${indent}//${comment}`
+    }
+  }
+
+  parseNode (node, level) {
+    const indent = '  '.repeat(level)
+
+    if (isDocumentTypeNode(node)) {
+      return `${indent}doctype html`
     }
 
-    if (treeAdapter.isTextNode(node)) return `${indentation}| ${node.value}`
-    else if (treeAdapter.isCommentNode(node)) {
-      return `${node.data
-        .split('\n')
-        .map(l => `${indentation}//${l}`)
-        .join('\n')}`
-    } else if (treeAdapter.isElementNode(node)) {
-      let line = `${indentation}${this.setAttributes(node)}`
+    if (isTextNode(node)) {
+      return `${indent}| ${node.value}`
+    } else if (isCommentNode(node)) {
+      return this.parseComment(node, indent)
+    } else if (isElementNode(node)) {
+      let line = `${indent}${this.setAttributes(node)}`
 
       if (this.isUniqueTextNode(node)) {
         line += ` ${node.childNodes[0].value}`
@@ -76,16 +91,15 @@ class Parser {
     let pugNode = tagName
 
     attributes.forEach(({ name, value }) => {
-      let hasClass = false
-      let hasId = false
+      let shorten = false
 
       switch (name) {
         case 'id':
-          hasId = true
+          shorten = true
           pugNode += `#${value}`
           break
         case 'class':
-          hasClass = true
+          shorten = true
           pugNode += `.${value.split(' ').join('.')}`
           break
         default:
@@ -94,7 +108,7 @@ class Parser {
       }
 
       // Remove div tagName
-      if (tagName === 'div' && (hasId || hasClass)) {
+      if (tagName === 'div' && shorten) {
         pugNode = pugNode.replace('div', '')
       }
     })
@@ -106,15 +120,8 @@ class Parser {
     return pugNode
   }
 
-  // Identify Node type
-  is (type, node) {
-    return node.nodeName === type
-  }
-
   isUniqueTextNode (node) {
-    return (
-      node.childNodes.length === 1 && treeAdapter.isTextNode(node.childNodes[0])
-    )
+    return node.childNodes.length === 1 && isTextNode(node.childNodes[0])
   }
 }
 
