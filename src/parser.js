@@ -54,7 +54,7 @@ class Parser {
 
     // Differentiate single line to multi-line comments
     if (comment.length > 1) {
-      const multiLine = comment.map(line => `  ${line}`).join('\n')
+      const multiLine = comment.map(line => `${indent}  ${line}`).join('\n')
       return `${indent}//${multiLine}`
     } else {
       return `${indent}//${comment}`
