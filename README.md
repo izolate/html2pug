@@ -1,10 +1,16 @@
 # html2pug
-HTML to Pug converter.
+Converts HTML to Pug (formerly Jade)
 
-Node.js 5.0+ minimum. Uses depth-first search for DOM tree traversal, and ES6 generators.
+## Install
 
-## Early stages. Very experimental.
+Get it on npm:
 
+```bash
+npm i -g html2pug
 ```
-node src/cli.js -f /path/to/file.html
+
+## Usage
+
+```bash
+html2pug -f /path/to/file.html
 ```
