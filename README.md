@@ -1,7 +1,7 @@
 # html2pug
 Converts **HTML** to **Pug** templating language (formerly Jade)
 
-From this:
+Turn this :unamused:
 ```html
 <!doctype html>
 <html lang="en">
@@ -16,7 +16,7 @@ From this:
 </html>
 ```
 
-To this:
+Into this :tada:
 ```pug
 !doctype html
 html(lang='en')
@@ -37,10 +37,14 @@ npm i -g html2pug
 
 ## Usage
 
-```bash
-# Write to stdin
-html2pug < example.html
+### CLI
+Accept input from a file and write to stdout:
 
-# Create a .pug file
+```bash
+html2pug < example.html
+```
+
+Or write to a file:
+```bash
 html2pug < example.html > example.pug
 ```
