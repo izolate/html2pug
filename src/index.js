@@ -1,12 +1,13 @@
 'use strict'
 
-const minify = require('html-minifier').minify
-const parse5 = require('parse5')
+const { minify } = require('html-minifier')
+const { parse, parseFragment } = require('parse5')
 const Parser = require('./parser')
 
 module.exports = async (
   sourceHtml,
   {
+    tabs = false,
     fragment = false,
     caseSensitive = true,
     removeEmptyAttributes = true,
@@ -15,6 +16,7 @@ module.exports = async (
     collapseInlineTagWhitespace = true
   } = {}
 ) => {
+  // Minify source HTML
   const html = minify(sourceHtml, {
     removeEmptyAttributes,
     collapseWhitespace,
@@ -23,9 +25,11 @@ module.exports = async (
     caseSensitive
   })
 
-  // Server-side
-  const document = fragment ? parse5.parseFragment(html) : parse5.parse(html)
+  // Parse minified HTML
+  const parser = new Parser({
+    root: fragment ? parseFragment(html) : parse(html),
+    tabs
+  })
 
-  const parser = new Parser(document)
   return parser.parse()
 }

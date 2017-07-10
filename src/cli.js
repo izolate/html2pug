@@ -14,6 +14,7 @@ const help = [
   '\n  Usage: html2pug [options] < [file]\n',
   '  Options:\n',
   `    -f, --fragment          Don't wrap output in <html>/<body> tags`,
+  `    -t, --tabs              Use tabs instead of spaces`,
   `    -h, --help              Show this page`,
   `    -v, --version           Show version\n`,
   '  Examples:\n',
@@ -26,7 +27,7 @@ const help = [
 /**
  * Convert HTML from stdin to Pug
  */
-async function main ({ fragment, needsHelp, showVersion }) {
+async function main ({ fragment, needsHelp, showVersion, tabs }) {
   const stdin = await getStdin()
 
   if (showVersion) {
@@ -38,7 +39,7 @@ async function main ({ fragment, needsHelp, showVersion }) {
   }
 
   try {
-    const pug = await html2pug(stdin, { fragment })
+    const pug = await html2pug(stdin, { tabs, fragment })
     console.log(pug)
   } catch (e) {
     throw e
@@ -51,5 +52,6 @@ async function main ({ fragment, needsHelp, showVersion }) {
 main({
   fragment: !!(argv.fragment || argv.f),
   needsHelp: !!(argv.help || argv.h),
-  showVersion: !!(argv.version || argv.v)
+  showVersion: !!(argv.version || argv.v),
+  tabs: !!(argv.tabs || argv.t)
 })

@@ -1,7 +1,7 @@
 # html2pug
 Converts **HTML** to **Pug** templating language (formerly Jade)
 
-Turn this :unamused:
+Turns this :unamused:
 ```html
 <!doctype html>
 <html lang="en">

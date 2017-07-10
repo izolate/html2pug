@@ -6,9 +6,14 @@ const {
 } = require('parse5').treeAdapters.default
 
 class Parser {
-  constructor (root) {
+  constructor ({ root, tabs = false }) {
     this.root = root
+    this.tabs = tabs
     this.pug = ''
+  }
+
+  get indent () {
+    return this.tabs ? '\t' : '  '
   }
 
   parse () {
@@ -62,7 +67,7 @@ class Parser {
   }
 
   parseNode (node, level) {
-    const indent = '  '.repeat(level)
+    const indent = this.indent.repeat(level)
 
     if (isDocumentTypeNode(node)) {
       return `${indent}doctype html`
