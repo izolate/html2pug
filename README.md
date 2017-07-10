@@ -48,3 +48,20 @@ Or write to a file:
 ```bash
 html2pug < example.html > example.pug
 ```
+
+### Programmatically
+
+```js
+const html2pug = require('html2pug')
+
+const html = '<header><h1 class="title">Hello World!</h1></header>'
+
+// Inside an async/await function
+const pug = await html2pug(html, { tabs: true })
+```
+
+### Options
+
+Name | Type | Default | Description
+--- | --- | --- | ---
+tabs | Boolean | `false` | Use tabs instead of spaces
