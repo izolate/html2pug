@@ -14,3 +14,10 @@ npm i -g html2pug
 ```bash
 html2pug -f /path/to/file.html
 ```
+
+## Development
+```bash
+cd html2pug
+npm install
+npm link
+```
