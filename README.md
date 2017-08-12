@@ -1,5 +1,6 @@
 # html2pug
-Converts **HTML** to **Pug** templating language (formerly Jade)
+Converts **HTML** to **Pug** templating language (_formerly Jade_).  
+Requires Node.js version `7.6` or higher.
 
 Turns this :unamused:
 ```html
@@ -49,6 +50,8 @@ Or write to a file:
 html2pug < example.html > example.pug
 ```
 
+See `html2pug --help` for more information.
+
 ### Programmatically
 
 ```js
@@ -65,3 +68,4 @@ const pug = await html2pug(html, { tabs: true })
 Name | Type | Default | Description
 --- | --- | --- | ---
 tabs | Boolean | `false` | Use tabs instead of spaces
+fragment | Boolean | `false` | Wrap in enclosing `<html>` and `<body>` tags

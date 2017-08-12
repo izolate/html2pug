@@ -4,7 +4,7 @@ const { minify } = require('html-minifier')
 const { parse, parseFragment } = require('parse5')
 const Parser = require('./parser')
 
-module.exports = async (
+module.exports = (
   sourceHtml,
   {
     tabs = false,
