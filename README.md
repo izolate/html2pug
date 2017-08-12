@@ -58,9 +58,7 @@ See `html2pug --help` for more information.
 const html2pug = require('html2pug')
 
 const html = '<header><h1 class="title">Hello World!</h1></header>'
-
-// Inside an async/await function
-const pug = await html2pug(html, { tabs: true })
+const pug = html2pug(html, { tabs: true })
 ```
 
 ### Options
