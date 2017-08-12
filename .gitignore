@@ -36,7 +36,8 @@ node_modules
 .DS_Store
 
 # Test
-test.*
+index.html
+index.pug
 
 # Vim
 *.swp

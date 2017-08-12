@@ -1,18 +1,19 @@
 {
   "name": "html2pug",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Converts HTML to Pug",
   "main": "src/index.js",
   "bin": {
     "html2pug": "src/cli.js"
   },
   "dependencies": {
-    "arrify": "^1.0.1",
+    "get-stdin": "^5.0.1",
     "html-minifier": "^3.5.2",
-    "minimist": "^1.2.0",
-    "parse5": "^2.1.5"
+    "parse5": "^2.1.5",
+    "yargs": "^8.0.2"
   },
   "devDependencies": {
+    "ava": "^0.21.0",
     "eslint": "^4.1.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.6.1",
@@ -24,7 +25,7 @@
     "prettier-standard": "^6.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ava",
     "standard": "prettier-standard 'src/**/*.js'",
     "lint": "eslint src",
     "precommit": "lint-staged",
