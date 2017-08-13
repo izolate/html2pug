@@ -19,7 +19,7 @@ Turns this :unamused:
 
 Into this :tada:
 ```pug
-!doctype html
+doctype html
 html(lang='en')
   head
     title Hello World!

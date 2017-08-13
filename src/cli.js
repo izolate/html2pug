@@ -38,12 +38,8 @@ async function main ({ fragment, needsHelp, showVersion, tabs }) {
     return console.log(help)
   }
 
-  try {
-    const pug = await html2pug(stdin, { tabs, fragment })
-    console.log(pug)
-  } catch (e) {
-    throw e
-  }
+  const pug = html2pug(stdin, { tabs, fragment })
+  console.log(pug)
 }
 
 /**
