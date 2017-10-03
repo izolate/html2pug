@@ -9,6 +9,7 @@ const html = `<!doctype html>
   <body>
     <div id="content">
       <h1 class="accents">â, é, ï, õ, ù</h1>
+      <h2 aria-label="Tests with single quotes don't fail">Text</h2>
     </header>
   </body>
 </html>`
@@ -19,7 +20,8 @@ html(lang='en')
     title Hello World!
   body
     #content
-      h1.accents â, é, ï, õ, ù`
+      h1.accents â, é, ï, õ, ù
+      h2(aria-label="Tests with single quotes don't fail") Text`
 
 test('Pug', t => {
   const generated = html2pug(html)
