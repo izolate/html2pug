@@ -9,7 +9,6 @@ const html = `<!doctype html>
   <body>
     <div id="content">
       <h1 class="accents">â, é, ï, õ, ù</h1>
-      <h2 aria-label="Tests with single quotes don't fail">Text</h2>
     </header>
   </body>
 </html>`
@@ -20,8 +19,7 @@ html(lang='en')
     title Hello World!
   body
     #content
-      h1.accents â, é, ï, õ, ù
-      h2(aria-label="Tests with single quotes don't fail") Text`
+      h1.accents â, é, ï, õ, ù`
 
 test('Pug', t => {
   const generated = html2pug(html)
@@ -40,5 +38,26 @@ test('Tabs', t => {
   })
 
   const expected = 'div\n\tspan Tabs!'
+  t.is(generated, expected)
+})
+
+test('Single quotes in attributes', t => {
+  const generated = html2pug(
+    `<i aria-label="Tests with single quotes don't fail"></i>`,
+    {
+      fragment: true
+    }
+  )
+
+  const expected = `i(aria-label="Tests with single quotes don't fail")`
+  t.is(generated, expected)
+})
+
+test('Empty attributes', t => {
+  const generated = html2pug(`<span translate #templatevar>Test</span>`, {
+    fragment: true
+  })
+
+  const expected = `span(translate, #templatevar) Test`
   t.is(generated, expected)
 })

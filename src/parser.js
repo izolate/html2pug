@@ -108,8 +108,12 @@ class Parser {
           pugNode += `.${value.split(' ').join('.')}`
           break
         default:
-          const q = /'/.test(value) ? '"' : "'"
-          attributeList.push(`${name}=${q}${value}${q}`)
+          if (!value) {
+            attributeList.push(`${name}`)
+          } else {
+            const q = /'/.test(value) ? '"' : "'"
+            attributeList.push(`${name}=${q}${value}${q}`)
+          }
           break
       }
 
