@@ -27,19 +27,23 @@ const help = [
 /**
  * Convert HTML from stdin to Pug
  */
-async function main ({ fragment, needsHelp, showVersion, tabs }) {
-  const stdin = await getStdin()
+function main ({ fragment, needsHelp, showVersion, tabs }) {
+  getStdin()
+    .then((stdin) => {
+      if (showVersion) {
+        return console.log(version)
+      }
 
-  if (showVersion) {
-    return console.log(version)
-  }
+      if (needsHelp || !stdin) {
+        return console.log(help)
+      }
 
-  if (needsHelp || !stdin) {
-    return console.log(help)
-  }
-
-  const pug = html2pug(stdin, { tabs, fragment })
-  console.log(pug)
+      const pug = html2pug(stdin, { tabs, fragment })
+      console.log(pug)
+    })
+    .catch((err) => {
+      throw err
+    })
 }
 
 /**
