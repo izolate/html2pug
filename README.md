@@ -12,7 +12,7 @@ Turns this :unamused:
   <body>
     <div id="content">
       <h1 class="title">Hello World!</h1>
-    </header>
+    </div>
   </body>
 </html>
 ```
