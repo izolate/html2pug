@@ -14,8 +14,8 @@ const html = `<!doctype html>
        $(function() {
           var type = /person/.test(location.search) ? 'person' : 'company'
           centerInit({
-              //					type: 'person'
-              //					type: 'company'
+              // type: 'person'
+              // type: 'company'
               type: type,
           });
       });
@@ -34,8 +34,8 @@ html(lang='en')
            $(function() {
               var type = /person/.test(location.search) ? 'person' : 'company'
               centerInit({
-                  //					type: 'person'
-                  //					type: 'company'
+                  // type: 'person'
+                  // type: 'company'
                   type: type,
               });
           });`
