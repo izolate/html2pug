@@ -66,6 +66,20 @@ class Parser {
     }
   }
 
+  parseJavascriptString (string, indent) {
+    const innerText = string.split('\n')
+
+    // Differentiate single line to multi-line comments
+    if (innerText.length > 1) {
+      const multiLine = innerText
+        .map(line => `${this.indent}${line}`)
+        .join('\n')
+      return `${indent}${multiLine}`
+    } else {
+      return `${indent}${this.indent}${innerText}`
+    }
+  }
+
   parseNode (node, level) {
     const indent = this.indent.repeat(level)
 
@@ -81,7 +95,12 @@ class Parser {
       let line = `${indent}${this.setAttributes(node)}`
 
       if (this.isUniqueTextNode(node)) {
-        line += ` ${node.childNodes[0].value}`
+        let innerText = node.childNodes[0].value
+        if (node.tagName === 'script') {
+          line += `.\n${this.parseJavascriptString(innerText, indent)}`
+        } else {
+          line += ` ${innerText}`
+        }
       }
 
       return line

@@ -11,14 +11,18 @@ const html = `<!doctype html>
       <h1 class="accents">â, é, ï, õ, ù</h1>
     </header>
     <script type="text/javascript">
-       $(function() {
-          var type = /person/.test(location.search) ? 'person' : 'company'
-          centerInit({
-              // type: 'person'
-              // type: 'company'
-              type: type,
-          });
+      $(function() {
+        var type = /person/.test(location.search) ? 'person' : 'company'
+        centerInit({
+            // type: 'person'
+            // type: 'company'
+            type: type,
+        });
       });
+    </script>
+    <script type="text/javascript">var a = 1;</script>
+    <script type="text/javascript">
+        var b = 2;
     </script>
   </body>
 </html>`
@@ -31,14 +35,18 @@ html(lang='en')
     #content
       h1.accents â, é, ï, õ, ù
       script(type='text/javascript').
-           $(function() {
-              var type = /person/.test(location.search) ? 'person' : 'company'
-              centerInit({
-                  // type: 'person'
-                  // type: 'company'
-                  type: type,
-              });
-          });`
+        $(function() {
+          var type = /person/.test(location.search) ? 'person' : 'company'
+          centerInit({
+              // type: 'person'
+              // type: 'company'
+              type: type,
+          });
+        });
+      script(type='text/javascript').
+        var a = 1;
+      script(type='text/javascript').
+        var b = 2;`
 
 test('Pug', t => {
   const generated = html2pug(html)
