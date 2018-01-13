@@ -10,6 +10,16 @@ const html = `<!doctype html>
     <div id="content">
       <h1 class="accents">â, é, ï, õ, ù</h1>
     </header>
+    <script type="text/javascript">
+       $(function() {
+          var type = /person/.test(location.search) ? 'person' : 'company'
+          centerInit({
+              //					type: 'person'
+              //					type: 'company'
+              type: type,
+          });
+      });
+    </script>
   </body>
 </html>`
 
@@ -19,7 +29,16 @@ html(lang='en')
     title Hello World!
   body
     #content
-      h1.accents â, é, ï, õ, ù`
+      h1.accents â, é, ï, õ, ù
+      script(type='text/javascript').
+           $(function() {
+              var type = /person/.test(location.search) ? 'person' : 'company'
+              centerInit({
+                  //					type: 'person'
+                  //					type: 'company'
+                  type: type,
+              });
+          });`
 
 test('Pug', t => {
   const generated = html2pug(html)
