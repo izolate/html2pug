@@ -14,15 +14,15 @@ const html = `<!doctype html>
       $(function() {
         var type = /person/.test(location.search) ? 'person' : 'company'
         centerInit({
-            // type: 'person'
-            // type: 'company'
-            type: type,
+          // type: 'person'
+          // type: 'company'
+          type: type,
         });
       });
     </script>
     <script type="text/javascript">var a = 1;</script>
     <script type="text/javascript">
-        var b = 2;
+      var b = 2;
     </script>
   </body>
 </html>`
@@ -38,9 +38,9 @@ html(lang='en')
         $(function() {
           var type = /person/.test(location.search) ? 'person' : 'company'
           centerInit({
-              // type: 'person'
-              // type: 'company'
-              type: type,
+            // type: 'person'
+            // type: 'company'
+            type: type,
           });
         });
       script(type='text/javascript').
