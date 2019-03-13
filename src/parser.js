@@ -108,7 +108,7 @@ class Parser {
           pugNode += `.${value.split(' ').join('.')}`
           break
         default:
-          attributeList.push(`${name}='${value}'`)
+          attributeList.push(`${name}="${value}"`)
           break
       }
 
@@ -119,7 +119,7 @@ class Parser {
     })
 
     if (attributeList.length) {
-      pugNode += `(${attributeList.join(', ')})`
+      pugNode += `(${attributeList.join(' ')})`
     }
 
     return pugNode
