@@ -27,7 +27,7 @@ const help = [
 /**
  * Convert HTML from stdin to Pug
  */
-async function main ({ fragment, needsHelp, showVersion, tabs }) {
+async function main ({ isFragment, needsHelp, showVersion, useTabs }) {
   const stdin = await getStdin()
 
   if (showVersion) {
@@ -38,7 +38,7 @@ async function main ({ fragment, needsHelp, showVersion, tabs }) {
     return console.log(help)
   }
 
-  const pug = html2pug(stdin, { tabs, fragment })
+  const pug = html2pug(stdin, { isFragment, useTabs })
   console.log(pug)
 }
 
@@ -46,8 +46,8 @@ async function main ({ fragment, needsHelp, showVersion, tabs }) {
  * Get the CLI options and run program
  */
 main({
-  fragment: !!(argv.fragment || argv.f),
+  isFragment: !!(argv.fragment || argv.f),
   needsHelp: !!(argv.help || argv.h),
   showVersion: !!(argv.version || argv.v),
-  tabs: !!(argv.tabs || argv.t)
+  useTabs: !!(argv.tabs || argv.t)
 })

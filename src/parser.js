@@ -6,14 +6,14 @@ const {
 } = require('parse5').treeAdapters.default
 
 class Parser {
-  constructor ({ root, tabs = false }) {
+  constructor ({ root, useTabs = false }) {
     this.root = root
-    this.tabs = tabs
+    this.useTabs = useTabs
     this.pug = ''
   }
 
   get indent () {
-    return this.tabs ? '\t' : '  '
+    return this.useTabs ? '\t' : '  '
   }
 
   parse () {

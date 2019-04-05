@@ -27,14 +27,14 @@ test('Pug', t => {
 })
 
 test('Fragment', t => {
-  const generated = html2pug('<h1>Hello World!</h1>', { fragment: true })
+  const generated = html2pug('<h1>Hello World!</h1>', { isFragment: true })
   t.falsy(generated.startsWith('html'))
 })
 
 test('Tabs', t => {
   const generated = html2pug('<div><span>Tabs!</span></div>', {
-    fragment: true,
-    tabs: true
+    isFragment: true,
+    useTabs: true
   })
 
   const expected = 'div\n\tspan Tabs!'
