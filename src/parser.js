@@ -96,24 +96,28 @@ class Parser {
     let pugNode = tagName
 
     attributes.forEach(({ name, value }) => {
-      let shorten = false
+      let noTag = false
 
       switch (name) {
         case 'id':
-          shorten = true
+          noTag = true
           pugNode += `#${value}`
           break
+
         case 'class':
-          shorten = true
+          noTag = true
           pugNode += `.${value.split(' ').join('.')}`
           break
+
         default:
-          attributeList.push(`${name}='${value}'`)
+          // Add escaped single quotes (\') to attribute values
+          const val = value.replace(/'/g, "\\'")
+          attributeList.push(`${name}='${val}'`)
           break
       }
 
-      // Remove div tagName
-      if (tagName === 'div' && shorten) {
+      // Remove div tag
+      if (tagName === 'div' && noTag) {
         pugNode = pugNode.replace('div', '')
       }
     })

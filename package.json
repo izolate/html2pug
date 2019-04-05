@@ -26,7 +26,7 @@
   },
   "scripts": {
     "test": "ava",
-    "standard": "prettier-standard 'src/**/*.js'",
+    "standard": "prettier-standard '**/*.js'",
     "lint": "eslint src",
     "precommit": "lint-staged",
     "prepush": "npm run lint"

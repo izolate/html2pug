@@ -1,7 +1,8 @@
 import test from 'ava'
 import html2pug from './src'
 
-const html = `<!doctype html>
+test('transforms html document to pug with default options', t => {
+  const html = `<!doctype html>
 <html lang="en">
   <head>
     <title>Hello World!</title>
@@ -13,7 +14,7 @@ const html = `<!doctype html>
   </body>
 </html>`
 
-const pug = `doctype html
+  const pug = `doctype html
 html(lang='en')
   head
     title Hello World!
@@ -21,22 +22,33 @@ html(lang='en')
     #content
       h1.accents â, é, ï, õ, ù`
 
-test('Pug', t => {
   const generated = html2pug(html)
   t.is(generated, pug)
 })
 
-test('Fragment', t => {
+test('result contains no outer html element when isFragment is truthy', t => {
   const generated = html2pug('<h1>Hello World!</h1>', { isFragment: true })
   t.falsy(generated.startsWith('html'))
 })
 
-test('Tabs', t => {
+test('result uses tabs when useTabs is truthy', t => {
   const generated = html2pug('<div><span>Tabs!</span></div>', {
     isFragment: true,
     useTabs: true
   })
 
   const expected = 'div\n\tspan Tabs!'
+  t.is(generated, expected)
+})
+
+test('single quotes in attribute values are escaped', t => {
+  const generated = html2pug(
+    `<button aria-label="closin'" onclick="window.alert('bye')">close</button>`,
+    {
+      isFragment: true
+    }
+  )
+
+  const expected = `button(aria-label='closin\\'', onclick='window.alert(\\'bye\\')') close`
   t.is(generated, expected)
 })
