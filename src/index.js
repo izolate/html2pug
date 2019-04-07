@@ -1,5 +1,3 @@
-'use strict'
-
 const { minify } = require('html-minifier')
 const { parse, parseFragment } = require('parse5')
 const Parser = require('./parser')
@@ -11,7 +9,7 @@ const defaultOptions = {
   removeEmptyAttributes: true,
   collapseWhitespace: true,
   collapseBooleanAttribute: true,
-  collapseInlineTagWhitespac: true
+  collapseInlineTagWhitespac: true,
 }
 
 module.exports = (sourceHtml, options = {}) => {
@@ -23,7 +21,7 @@ module.exports = (sourceHtml, options = {}) => {
   // Parse minified HTML
   const parser = new Parser({
     root: isFragment ? parseFragment(html) : parse(html),
-    useTabs
+    useTabs,
   })
 
   return parser.parse()

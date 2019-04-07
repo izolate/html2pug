@@ -14,26 +14,23 @@
   },
   "devDependencies": {
     "ava": "^0.21.0",
-    "eslint": "^4.1.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.6.1",
-    "eslint-plugin-node": "^5.1.0",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "husky": "^0.14.2",
-    "lint-staged": "^4.0.0",
-    "prettier-standard": "^6.0.0"
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.16.4"
   },
   "scripts": {
     "test": "ava",
-    "standard": "prettier-standard '**/*.js'",
-    "lint": "eslint src",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "precommit": "lint-staged",
     "prepush": "npm run lint"
   },
   "lint-staged": {
     "*.js": [
-      "prettier-standard",
+      "npm run lint:fix",
       "git add"
     ]
   },

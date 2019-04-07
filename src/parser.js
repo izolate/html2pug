@@ -2,21 +2,24 @@ const {
   isDocumentTypeNode,
   isTextNode,
   isElementNode,
-  isCommentNode
+  isCommentNode,
 } = require('parse5/lib/tree-adapters/default')
 
+const isUniqueTextNode = node =>
+  node.childNodes.length === 1 && isTextNode(node.childNodes[0])
+
 class Parser {
-  constructor ({ root, useTabs = false }) {
+  constructor({ root, useTabs = false }) {
     this.root = root
     this.useTabs = useTabs
     this.pug = ''
   }
 
-  get indent () {
+  get indent() {
     return this.useTabs ? '\t' : '  '
   }
 
-  parse () {
+  parse() {
     const walk = this.walk(this.root.childNodes, 0)
     let it
 
@@ -34,7 +37,7 @@ class Parser {
    * @param {DOM} tree - DOM tree or Node
    * @param {Number} level - Current tree level
    */
-  * walk (tree, level) {
+  *walk(tree, level) {
     if (!tree) {
       return
     }
@@ -47,26 +50,25 @@ class Parser {
       if (
         node.childNodes &&
         node.childNodes.length > 0 &&
-        !this.isUniqueTextNode(node)
+        !isUniqueTextNode(node)
       ) {
-        yield * this.walk(node.childNodes, level + 1)
+        yield* this.walk(node.childNodes, level + 1)
       }
     }
   }
 
-  parseComment (node, indent) {
+  parseComment(node, indent) {
     const comment = node.data.split('\n')
 
     // Differentiate single line to multi-line comments
     if (comment.length > 1) {
       const multiLine = comment.map(line => `${indent}  ${line}`).join('\n')
       return `${indent}//${multiLine}`
-    } else {
-      return `${indent}//${comment}`
     }
+    return `${indent}//${comment}`
   }
 
-  parseNode (node, level) {
+  parseNode(node, level) {
     const indent = this.indent.repeat(level)
 
     if (isDocumentTypeNode(node)) {
@@ -75,22 +77,23 @@ class Parser {
 
     if (isTextNode(node)) {
       return `${indent}| ${node.value}`
-    } else if (isCommentNode(node)) {
+    }
+    if (isCommentNode(node)) {
       return this.parseComment(node, indent)
-    } else if (isElementNode(node)) {
+    }
+    if (isElementNode(node)) {
       let line = `${indent}${this.setAttributes(node)}`
 
-      if (this.isUniqueTextNode(node)) {
+      if (isUniqueTextNode(node)) {
         line += ` ${node.childNodes[0].value}`
       }
 
       return line
-    } else {
-      return node
     }
+    return node
   }
 
-  setAttributes (node) {
+  setAttributes(node) {
     const { tagName, attrs } = node
     const attributes = []
     let pugNode = tagName
@@ -113,11 +116,12 @@ class Parser {
         case 'class':
           pugNode += `.${value.split(' ').join('.')}`
           break
-        default:
+        default: {
           // Add escaped single quotes (\') to attribute values
           const val = value.replace(/'/g, "\\'")
           attributes.push(`${name}='${val}'`)
           break
+        }
       }
     }
 
@@ -126,10 +130,6 @@ class Parser {
     }
 
     return pugNode
-  }
-
-  isUniqueTextNode (node) {
-    return node.childNodes.length === 1 && isTextNode(node.childNodes[0])
   }
 }
 
