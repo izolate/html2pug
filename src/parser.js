@@ -3,7 +3,7 @@ const {
   isTextNode,
   isElementNode,
   isCommentNode
-} = require('parse5').treeAdapters.default
+} = require('parse5/lib/tree-adapters/default')
 
 class Parser {
   constructor ({ root, useTabs = false }) {
