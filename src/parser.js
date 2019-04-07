@@ -91,39 +91,38 @@ class Parser {
   }
 
   setAttributes (node) {
-    const { tagName, attrs: attributes } = node
-    const attributeList = []
+    const { tagName, attrs } = node
+    const attributes = []
     let pugNode = tagName
 
-    attributes.forEach(({ name, value }) => {
-      let noTag = false
+    // Add CSS selectors to pug node and append any element attributes to it
+    for (const attr of attrs) {
+      const { name, value } = attr
+
+      // Remove div tag if a selector is present (shorthand)
+      // e.g. div#form() -> #form()
+      const hasSelector = name === 'id' || name === 'class'
+      if (tagName === 'div' && hasSelector) {
+        pugNode = pugNode.replace('div', '')
+      }
 
       switch (name) {
         case 'id':
-          noTag = true
           pugNode += `#${value}`
           break
-
         case 'class':
-          noTag = true
           pugNode += `.${value.split(' ').join('.')}`
           break
-
         default:
           // Add escaped single quotes (\') to attribute values
           const val = value.replace(/'/g, "\\'")
-          attributeList.push(`${name}='${val}'`)
+          attributes.push(`${name}='${val}'`)
           break
       }
+    }
 
-      // Remove div tag
-      if (tagName === 'div' && noTag) {
-        pugNode = pugNode.replace('div', '')
-      }
-    })
-
-    if (attributeList.length) {
-      pugNode += `(${attributeList.join(', ')})`
+    if (attributes.length) {
+      pugNode += `(${attributes.join(', ')})`
     }
 
     return pugNode
