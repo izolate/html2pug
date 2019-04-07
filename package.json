@@ -26,9 +26,7 @@
   "scripts": {
     "test": "ava",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "precommit": "lint-staged",
-    "prepush": "npm run lint"
+    "lint:fix": "eslint . --fix"
   },
   "lint-staged": {
     "*.js": [
@@ -52,5 +50,11 @@
   "bugs": {
     "url": "https://github.com/izolate/html2pug/issues"
   },
-  "homepage": "https://github.com/izolate/html2pug#readme"
+  "homepage": "https://github.com/izolate/html2pug#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint"
+    }
+  }
 }
