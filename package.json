@@ -7,8 +7,8 @@
     "html2pug": "src/cli.js"
   },
   "dependencies": {
-    "get-stdin": "^5.0.1",
-    "html-minifier": "^3.5.2",
+    "get-stdin": "^6.0.0",
+    "html-minifier": "^4.0.0",
     "parse5": "^2.1.5",
     "yargs": "^8.0.2"
   },
