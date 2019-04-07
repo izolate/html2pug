@@ -33,7 +33,7 @@ html(lang='en')
 Get it on [npm](https://www.npmjs.com/package/html2pug):
 
 ```bash
-npm i -g html2pug
+npm install -g html2pug
 ```
 
 ## Usage
@@ -58,12 +58,12 @@ See `html2pug --help` for more information.
 const html2pug = require('html2pug')
 
 const html = '<header><h1 class="title">Hello World!</h1></header>'
-const pug = html2pug(html, { tabs: true })
+const pug = html2pug(html, { useTabs: true })
 ```
 
 ### Options
 
 Name | Type | Default | Description
 --- | --- | --- | ---
-tabs | Boolean | `false` | Use tabs instead of spaces
-fragment | Boolean | `false` | Wrap in enclosing `<html>` and `<body>` tags
+useTabs | Boolean | `false` | Use tabs instead of spaces
+isFragment | Boolean | `false` | Wraps result in enclosing `<html>` and `<body>` tags if false
