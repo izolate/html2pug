@@ -1,12 +1,16 @@
-const {
-  isDocumentTypeNode,
-  isTextNode,
-  isElementNode,
-  isCommentNode,
-} = require('parse5/lib/tree-adapters/default')
+const DOCUMENT_TYPE_NODE = '#documentType'
+const TEXT_NODE = '#text'
+const COMMENT_NODE = '#comment'
+const DIV_NODE = 'div'
+const COMMENT_NODE_PUG = '//'
 
-const isUniqueTextNode = node =>
-  node.childNodes.length === 1 && isTextNode(node.childNodes[0])
+const hasSingleTextNodeChild = node => {
+  return (
+    node.childNodes &&
+    node.childNodes.length === 1 &&
+    node.childNodes[0].nodeName === TEXT_NODE
+  )
+}
 
 class Parser {
   constructor({ root, useTabs = false }) {
@@ -15,8 +19,13 @@ class Parser {
     this.pug = ''
   }
 
-  get indent() {
+  // Tab vs. Space
+  get indentType() {
     return this.useTabs ? '\t' : '  '
+  }
+
+  getIndent(level = 0) {
+    return this.indentType.repeat(level)
   }
 
   parse() {
@@ -45,58 +54,32 @@ class Parser {
     for (let i = 0; i < tree.length; i++) {
       const node = tree[i]
 
-      this.pug += `\n${this.parseNode(node, level)}`
+      const newline = this.parseNode(node, level)
+      if (newline) {
+        this.pug += `\n${newline}`
+      }
 
       if (
         node.childNodes &&
         node.childNodes.length > 0 &&
-        !isUniqueTextNode(node)
+        !hasSingleTextNodeChild(node)
       ) {
         yield* this.walk(node.childNodes, level + 1)
       }
     }
   }
 
-  parseComment(node, indent) {
-    const comment = node.data.split('\n')
-
-    // Differentiate single line to multi-line comments
-    if (comment.length > 1) {
-      const multiLine = comment.map(line => `${indent}  ${line}`).join('\n')
-      return `${indent}//${multiLine}`
-    }
-    return `${indent}//${comment}`
-  }
-
-  parseNode(node, level) {
-    const indent = this.indent.repeat(level)
-
-    if (isDocumentTypeNode(node)) {
-      return `${indent}doctype html`
-    }
-
-    if (isTextNode(node)) {
-      return `${indent}| ${node.value}`
-    }
-    if (isCommentNode(node)) {
-      return this.parseComment(node, indent)
-    }
-    if (isElementNode(node)) {
-      let line = `${indent}${this.setAttributes(node)}`
-
-      if (isUniqueTextNode(node)) {
-        line += ` ${node.childNodes[0].value}`
-      }
-
-      return line
-    }
-    return node
-  }
-
-  setAttributes(node) {
+  /*
+   * Returns a Pug node name with all attributes set in parentheses.
+   */
+  static getNodeWithAttributes(node) {
     const { tagName, attrs } = node
     const attributes = []
     let pugNode = tagName
+
+    if (!attrs) {
+      return pugNode
+    }
 
     // Add CSS selectors to pug node and append any element attributes to it
     for (const attr of attrs) {
@@ -105,8 +88,8 @@ class Parser {
       // Remove div tag if a selector is present (shorthand)
       // e.g. div#form() -> #form()
       const hasSelector = name === 'id' || name === 'class'
-      if (tagName === 'div' && hasSelector) {
-        pugNode = pugNode.replace('div', '')
+      if (tagName === DIV_NODE && hasSelector) {
+        pugNode = pugNode.replace(DIV_NODE, '')
       }
 
       switch (name) {
@@ -130,6 +113,93 @@ class Parser {
     }
 
     return pugNode
+  }
+
+  /**
+   * formatPugNode applies the correct indent for the current line,
+   * and formats the value as either as a single or multiline string.
+   *
+   * @param {String} node - The pug node (e.g. header(class='foo'))
+   * @param {String} value - The node's value
+   * @param {Number} level - Current tree level to generate indent
+   * @param {String} blockChar - The character used to denote a multiline value
+   */
+  formatPugNode(node, value = '', level, blockChar = '.') {
+    const indent = this.getIndent(level)
+    const result = `${indent}${node}`
+
+    const lines = value.split('\n')
+
+    if (lines.length > 1) {
+      const indentChild = this.getIndent(level + 1)
+      const multiline = lines.map(line => `${indentChild}${line}`).join('\n')
+      return `${result}${blockChar}\n${multiline}`
+    }
+
+    return value.length ? `${result} ${value}` : result
+  }
+
+  /**
+   * createElement formats a generic HTML element.
+   */
+  createElement(node, level) {
+    let pugNode = Parser.getNodeWithAttributes(node)
+
+    if (hasSingleTextNodeChild(node)) {
+      const value = node.childNodes[0].value
+      return this.formatPugNode(pugNode, value, level)
+    }
+
+    return this.formatPugNode(pugNode, node.value, level)
+  }
+
+  /**
+   * createComment formats a #comment element.
+   *
+   * Block comments in Pug don't require the dot '.' character.
+   */
+  createComment(node, level) {
+    return this.formatPugNode(COMMENT_NODE_PUG, node.data, level, '')
+  }
+
+  /**
+   * createText formats a #text element.
+   *
+   * A solitary line break (\n) in a #text element indicates
+   * unnecessary whitespace between elements that should be removed.
+   *
+   * Actual text in a single #text element has no significant
+   * whitespace and should be treated as inline text.
+   */
+  createText(node, level) {
+    const { value } = node
+    const indent = this.getIndent(level)
+
+    // Omit line breaks between HTML elements
+    if (/^[\n]+$/.test(value)) {
+      return false
+    }
+
+    return `${indent}| ${value}`
+  }
+
+  parseNode(node, level) {
+    let { nodeName } = node
+    const indent = this.getIndent(level)
+
+    switch (nodeName) {
+      case DOCUMENT_TYPE_NODE:
+        return `${indent}doctype html`
+
+      case COMMENT_NODE:
+        return this.createComment(node, level)
+
+      case TEXT_NODE:
+        return this.createText(node, level)
+
+      default:
+        return this.createElement(node, level)
+    }
   }
 }
 

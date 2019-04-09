@@ -24,14 +24,13 @@
     "prettier": "^1.16.4"
   },
   "scripts": {
-    "test": "ava",
+    "test": "ava test.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
   "lint-staged": {
     "*.js": [
       "npm run lint:fix",
-      "npm test",
       "git add"
     ]
   },

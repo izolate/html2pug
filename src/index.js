@@ -9,7 +9,7 @@ const defaultOptions = {
   removeEmptyAttributes: true,
   collapseWhitespace: true,
   collapseBooleanAttribute: true,
-  collapseInlineTagWhitespac: true,
+  preserveLineBreaks: true,
 }
 
 module.exports = (sourceHtml, options = {}) => {
