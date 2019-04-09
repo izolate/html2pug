@@ -39,13 +39,17 @@ npm install -g html2pug
 ## Usage
 
 ### CLI
-Accept input from a file and write to stdout:
+Accept input from a file or stdin and write to stdout:
 
 ```bash
+# choose a file
 html2pug < example.html
+
+# use pipe
+echo '<h1>foo</h1>' | html2pug -f
 ```
 
-Or write to a file:
+Write output to a file:
 ```bash
 html2pug < example.html > example.pug
 ```
