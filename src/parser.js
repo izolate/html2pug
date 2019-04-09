@@ -1,7 +1,7 @@
 const DOCUMENT_TYPE_NODE = '#documentType'
 const TEXT_NODE = '#text'
-const COMMENT_NODE = '#comment'
 const DIV_NODE = 'div'
+const COMMENT_NODE = '#comment'
 const COMMENT_NODE_PUG = '//'
 
 const hasSingleTextNodeChild = node => {
@@ -140,17 +140,11 @@ class Parser {
   }
 
   /**
-   * createElement formats a generic HTML element.
+   * createDoctype formats a #documentType element
    */
-  createElement(node, level) {
-    let pugNode = Parser.getNodeWithAttributes(node)
-
-    if (hasSingleTextNodeChild(node)) {
-      const value = node.childNodes[0].value
-      return this.formatPugNode(pugNode, value, level)
-    }
-
-    return this.formatPugNode(pugNode, node.value, level)
+  createDoctype(node, level) {
+    const indent = this.getIndent(level)
+    return `${indent}doctype html`
   }
 
   /**
@@ -165,7 +159,7 @@ class Parser {
   /**
    * createText formats a #text element.
    *
-   * A solitary line break (\n) in a #text element indicates
+   * A #text element containing only line breaks (\n) indicates
    * unnecessary whitespace between elements that should be removed.
    *
    * Actual text in a single #text element has no significant
@@ -183,13 +177,26 @@ class Parser {
     return `${indent}| ${value}`
   }
 
+  /**
+   * createElement formats a generic HTML element.
+   */
+  createElement(node, level) {
+    let pugNode = Parser.getNodeWithAttributes(node)
+
+    if (hasSingleTextNodeChild(node)) {
+      const value = node.childNodes[0].value
+      return this.formatPugNode(pugNode, value, level)
+    }
+
+    return this.formatPugNode(pugNode, node.value, level)
+  }
+
   parseNode(node, level) {
     let { nodeName } = node
-    const indent = this.getIndent(level)
 
     switch (nodeName) {
       case DOCUMENT_TYPE_NODE:
-        return `${indent}doctype html`
+        return this.createDoctype(node, level)
 
       case COMMENT_NODE:
         return this.createComment(node, level)
