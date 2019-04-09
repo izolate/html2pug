@@ -5,7 +5,33 @@ test('transforms html document to pug with default options', t => {
   const html = `<!doctype html>
 <html lang="en">
   <head>
+    <meta charset="utf-8" />
     <title>Hello World!</title>
+  </head>
+  <body data-page="home">
+    <header id="nav">
+      <h1 class="heading">Hello, world!</h1>
+    </header>
+  </body>
+</html>`
+
+  const pug = `doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title Hello World!
+  body(data-page='home')
+    header#nav
+      h1.heading Hello, world!`
+
+  const generated = html2pug(html)
+  t.is(generated, pug)
+})
+
+test('respects whitespace within elements', t => {
+  const html = `<!doctype html>
+<html lang="en">
+  <head>
     <style type="text/css">
 * {
   margin: 0;
@@ -13,10 +39,7 @@ test('transforms html document to pug with default options', t => {
 }
     </style>
   </head>
-  <body data-device="mobile">
-    <div id="root">
-      <h1 class="heading">Hello, world!</h1>
-    </div>
+  <body>
     <script type="text/javascript">
 $(document).ready(function() {
   console.log('ready')
@@ -28,7 +51,6 @@ $(document).ready(function() {
   const pug = `doctype html
 html(lang='en')
   head
-    title Hello World!
     style(type='text/css').
       
       * {
@@ -36,9 +58,7 @@ html(lang='en')
         padding: 0;
       }
       
-  body(data-device='mobile')
-    #root
-      h1.heading Hello, world!
+  body
     script(type='text/javascript').
       
       $(document).ready(function() {
@@ -47,6 +67,17 @@ html(lang='en')
       `
 
   const generated = html2pug(html)
+  t.is(generated, pug)
+})
+
+test('creates multiline block when linebreaks are present', t => {
+  const html = '<textarea>multi\nline\nstring</textarea>'
+  const pug = `textarea.
+  multi
+  line
+  string`
+
+  const generated = html2pug(html, { isFragment: true })
   t.is(generated, pug)
 })
 
@@ -74,24 +105,6 @@ test('removes whitespace between HTML elements', t => {
   li two
   li three
   li four`
-
-  const generated = html2pug(html, { isFragment: true })
-  t.is(generated, pug)
-})
-
-test('respects whitespace within <script> element', t => {
-  const html = `<script>
-[1, 2, 3].forEach(num => {
-  console.log(num)
-})
-</script>`
-
-  const pug = `script.
-  
-  [1, 2, 3].forEach(num => {
-    console.log(num)
-  })
-  `
 
   const generated = html2pug(html, { isFragment: true })
   t.is(generated, pug)
