@@ -28,6 +28,11 @@ html(lang='en')
   t.is(generated, pug)
 })
 
+test('result contains no outer html element when isFragment is truthy', t => {
+  const generated = html2pug('<h1>Hello World!</h1>', { isFragment: true })
+  t.falsy(generated.startsWith('html'))
+})
+
 test('respects whitespace within elements', t => {
   const html = `<!doctype html>
 <html lang="en">
@@ -110,16 +115,12 @@ test('removes whitespace between HTML elements', t => {
   t.is(generated, pug)
 })
 
-test('result contains no outer html element when isFragment is truthy', t => {
-  const generated = html2pug('<h1>Hello World!</h1>', { isFragment: true })
-  t.falsy(generated.startsWith('html'))
-})
-
 test('does not fail on unicode characters', t => {
   const generated = html2pug('<h1 class="accents">â, é, ï, õ, ù</h1>', {
     isFragment: true,
   })
   const expected = 'h1.accents â, é, ï, õ, ù'
+
   t.is(generated, expected)
 })
 
@@ -128,8 +129,8 @@ test('result uses tabs when useTabs is truthy', t => {
     isFragment: true,
     useTabs: true,
   })
-
   const expected = 'div\n\tspan Tabs!'
+
   t.is(generated, expected)
 })
 
@@ -140,7 +141,17 @@ test('single quotes in attribute values are escaped', t => {
       isFragment: true,
     }
   )
-
   const expected = `button(aria-label='closin\\'', onclick='window.alert(\\'bye\\')') close`
+
+  t.is(generated, expected)
+})
+
+test('collapses boolean attributes', t => {
+  const generated = html2pug(
+    `<input type="text" name="foo" disabled="disabled" readonly="readonly" />`,
+    { isFragment: true }
+  )
+  const expected = `input(type='text', name='foo', disabled, readonly)`
+
   t.is(generated, expected)
 })

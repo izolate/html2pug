@@ -102,7 +102,11 @@ class Parser {
         default: {
           // Add escaped single quotes (\') to attribute values
           const val = value.replace(/'/g, "\\'")
-          attributes.push(`${name}='${val}'`)
+          if (!val) {
+            attributes.push(name)
+          } else {
+            attributes.push(`${name}='${val}'`)
+          }
           break
         }
       }

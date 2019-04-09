@@ -8,7 +8,7 @@ const defaultOptions = {
   caseSensitive: true,
   removeEmptyAttributes: true,
   collapseWhitespace: true,
-  collapseBooleanAttribute: true,
+  collapseBooleanAttributes: true,
   preserveLineBreaks: true,
 }
 
