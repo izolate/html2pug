@@ -1,35 +1,30 @@
-'use strict'
-
 const { minify } = require('html-minifier')
 const { parse, parseFragment } = require('parse5')
-const Parser = require('./parser')
+const Pugify = require('./parser')
 
-module.exports = (
-  sourceHtml,
-  {
-    tabs = false,
-    fragment = false,
-    caseSensitive = true,
-    removeEmptyAttributes = true,
-    collapseWhitespace = true,
-    collapseBooleanAttributes = true,
-    collapseInlineTagWhitespace = true
-  } = {}
-) => {
+const defaultOptions = {
+  // html2pug options
+  isFragment: false,
+  useTabs: false,
+  useCommas: true,
+
+  // html-minifier options
+  caseSensitive: true,
+  removeEmptyAttributes: true,
+  collapseWhitespace: true,
+  collapseBooleanAttributes: true,
+  preserveLineBreaks: true,
+}
+
+module.exports = (sourceHtml, options = {}) => {
   // Minify source HTML
-  const html = minify(sourceHtml, {
-    removeEmptyAttributes,
-    collapseWhitespace,
-    collapseBooleanAttributes,
-    collapseInlineTagWhitespace,
-    caseSensitive
-  })
+  const opts = { ...defaultOptions, ...options }
+  const html = minify(sourceHtml, opts)
 
-  // Parse minified HTML
-  const parser = new Parser({
-    root: fragment ? parseFragment(html) : parse(html),
-    tabs
-  })
+  const { isFragment, useTabs, useCommas } = opts
 
-  return parser.parse()
+  // Parse HTML and convert to Pug
+  const documentRoot = isFragment ? parseFragment(html) : parse(html)
+  const pugify = new Pugify(documentRoot, { useTabs, useCommas })
+  return pugify.parse()
 }

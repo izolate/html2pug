@@ -33,19 +33,23 @@ html(lang='en')
 Get it on [npm](https://www.npmjs.com/package/html2pug):
 
 ```bash
-npm i -g html2pug
+npm install -g html2pug
 ```
 
 ## Usage
 
 ### CLI
-Accept input from a file and write to stdout:
+Accept input from a file or stdin and write to stdout:
 
 ```bash
+# choose a file
 html2pug < example.html
+
+# use pipe
+echo '<h1>foo</h1>' | html2pug -f
 ```
 
-Or write to a file:
+Write output to a file:
 ```bash
 html2pug < example.html > example.pug
 ```
@@ -58,12 +62,13 @@ See `html2pug --help` for more information.
 const html2pug = require('html2pug')
 
 const html = '<header><h1 class="title">Hello World!</h1></header>'
-const pug = html2pug(html, { tabs: true })
+const pug = html2pug(html, { useTabs: true })
 ```
 
 ### Options
 
 Name | Type | Default | Description
 --- | --- | --- | ---
-tabs | Boolean | `false` | Use tabs instead of spaces
-fragment | Boolean | `false` | Wrap in enclosing `<html>` and `<body>` tags
+useTabs | Boolean | `false` | Use tabs instead of spaces
+useCommas | Boolean | `true` | Use commas to separate node attributes, or a space if false
+isFragment | Boolean | `false` | Wraps result in enclosing `<html>` and `<body>` tags if false

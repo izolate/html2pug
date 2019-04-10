@@ -1,39 +1,36 @@
 {
   "name": "html2pug",
-  "version": "2.0.1",
+  "version": "3.0.0",
   "description": "Converts HTML to Pug",
   "main": "src/index.js",
   "bin": {
     "html2pug": "src/cli.js"
   },
   "dependencies": {
-    "get-stdin": "^5.0.1",
-    "html-minifier": "^3.5.2",
-    "parse5": "^2.1.5",
+    "get-stdin": "^6.0.0",
+    "html-minifier": "^4.0.0",
+    "parse5": "^5.1.0",
     "yargs": "^8.0.2"
   },
   "devDependencies": {
-    "ava": "^0.21.0",
-    "eslint": "^4.1.1",
-    "eslint-config-standard": "^10.2.1",
-    "eslint-plugin-import": "^2.6.1",
-    "eslint-plugin-node": "^5.1.0",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "husky": "^0.14.2",
-    "lint-staged": "^4.0.0",
-    "prettier-standard": "^6.0.0"
+    "ava": "^1.4.1",
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.16.4"
   },
   "scripts": {
-    "test": "ava",
-    "standard": "prettier-standard 'src/**/*.js'",
-    "lint": "eslint src",
-    "precommit": "lint-staged",
-    "prepush": "npm run lint"
+    "test": "ava test.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "lint-staged": {
     "*.js": [
-      "prettier-standard",
+      "npm run lint:fix",
       "git add"
     ]
   },
@@ -53,5 +50,11 @@
   "bugs": {
     "url": "https://github.com/izolate/html2pug/issues"
   },
-  "homepage": "https://github.com/izolate/html2pug#readme"
+  "homepage": "https://github.com/izolate/html2pug#readme",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint"
+    }
+  }
 }
