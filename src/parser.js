@@ -108,11 +108,7 @@ class Parser {
         default: {
           // Add escaped single quotes (\') to attribute values
           const val = value.replace(/'/g, "\\'")
-          if (!val) {
-            attributes.push(name)
-          } else {
-            attributes.push(`${name}='${val}'`)
-          }
+          attributes.push(val ? `${name}='${val}'` : name)
           break
         }
       }
@@ -193,12 +189,11 @@ class Parser {
   createElement(node, level) {
     const pugNode = Parser.getNodeWithAttributes(node)
 
-    if (hasSingleTextNodeChild(node)) {
-      const value = node.childNodes[0].value
-      return this.formatPugNode(pugNode, value, level)
-    }
+    const value = hasSingleTextNodeChild(node)
+      ? node.childNodes[0].value
+      : node.value
 
-    return this.formatPugNode(pugNode, node.value, level)
+    return this.formatPugNode(pugNode, value, level)
   }
 
   parseNode(node, level) {
