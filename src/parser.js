@@ -191,7 +191,7 @@ class Parser {
    * createElement formats a generic HTML element.
    */
   createElement(node, level) {
-    let pugNode = Parser.getNodeWithAttributes(node)
+    const pugNode = Parser.getNodeWithAttributes(node)
 
     if (hasSingleTextNodeChild(node)) {
       const value = node.childNodes[0].value
@@ -202,7 +202,7 @@ class Parser {
   }
 
   parseNode(node, level) {
-    let { nodeName } = node
+    const { nodeName } = node
 
     switch (nodeName) {
       case DOCUMENT_TYPE_NODE:
