@@ -136,13 +136,16 @@ class Parser {
 
     const lines = value.split('\n')
 
-    if (lines.length > 1) {
-      const indentChild = this.getIndent(level + 1)
-      const multiline = lines.map(line => `${indentChild}${line}`).join('\n')
-      return `${result}${blockChar}\n${multiline}`
+    // Create an inline node
+    if (lines.length <= 1) {
+      return value.length ? `${result} ${value}` : result
     }
 
-    return value.length ? `${result} ${value}` : result
+    // Create a multiline node
+    const indentChild = this.getIndent(level + 1)
+    const multiline = lines.map(line => `${indentChild}${line}`).join('\n')
+
+    return `${result}${blockChar}\n${multiline}`
   }
 
   /**
