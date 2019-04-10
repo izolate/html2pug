@@ -1,3 +1,5 @@
+const { extend } = require('./utils')
+
 const DOCUMENT_TYPE_NODE = '#documentType'
 const TEXT_NODE = '#text'
 const DIV_NODE = 'div'
@@ -12,16 +14,20 @@ const hasSingleTextNodeChild = node => {
   )
 }
 
-class Parser {
-  constructor({ root, useTabs = false }) {
-    this.root = root
-    this.useTabs = useTabs
-    this.pug = ''
-  }
+const defaultOptions = {
+  useTabs: false,
+}
 
-  // Tab vs. Space
-  get indentType() {
-    return this.useTabs ? '\t' : '  '
+class Parser {
+  constructor(root, options = {}) {
+    // Merge default options with supplied
+    const { useTabs } = extend(defaultOptions, options)
+
+    this.root = root
+    this.pug = ''
+
+    // Tabs or spaces?
+    this.indentType = useTabs ? '\t' : '  '
   }
 
   getIndent(level = 0) {
