@@ -124,12 +124,31 @@ test('does not fail on unicode characters', t => {
   t.is(generated, expected)
 })
 
-test('result uses tabs when useTabs is truthy', t => {
+test('uses tabs when useTabs is truthy', t => {
   const generated = html2pug('<div><span>Tabs!</span></div>', {
     isFragment: true,
     useTabs: true,
   })
   const expected = 'div\n\tspan Tabs!'
+
+  t.is(generated, expected)
+})
+
+test('uses a comma to separate attributes', t => {
+  const generated = html2pug('<input type="text" name="foo" />', {
+    isFragment: true,
+  })
+  const expected = "input(type='text', name='foo')"
+
+  t.is(generated, expected)
+})
+
+test('uses a space to separate attributes', t => {
+  const generated = html2pug('<input type="text" name="foo" />', {
+    isFragment: true,
+    useCommas: false,
+  })
+  const expected = "input(type='text' name='foo')"
 
   t.is(generated, expected)
 })

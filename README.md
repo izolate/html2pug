@@ -70,4 +70,5 @@ const pug = html2pug(html, { useTabs: true })
 Name | Type | Default | Description
 --- | --- | --- | ---
 useTabs | Boolean | `false` | Use tabs instead of spaces
+useCommas | Boolean | `true` | Use commas to separate node attributes, or a space if false
 isFragment | Boolean | `false` | Wraps result in enclosing `<html>` and `<body>` tags if false

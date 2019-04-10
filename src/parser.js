@@ -1,5 +1,3 @@
-const { extend } = require('./utils')
-
 const DOCUMENT_TYPE_NODE = '#documentType'
 const TEXT_NODE = '#text'
 const DIV_NODE = 'div'
@@ -14,20 +12,17 @@ const hasSingleTextNodeChild = node => {
   )
 }
 
-const defaultOptions = {
-  useTabs: false,
-}
-
 class Parser {
   constructor(root, options = {}) {
-    // Merge default options with supplied
-    const { useTabs } = extend(defaultOptions, options)
-
-    this.root = root
     this.pug = ''
+    this.root = root
+
+    const { useTabs, useCommas } = options
 
     // Tabs or spaces?
     this.indentType = useTabs ? '\t' : '  '
+    // Comma separate attributes?
+    this.separatorType = useCommas ? ', ' : ' '
   }
 
   getIndent(level = 0) {
@@ -78,7 +73,7 @@ class Parser {
   /*
    * Returns a Pug node name with all attributes set in parentheses.
    */
-  static getNodeWithAttributes(node) {
+  getNodeWithAttributes(node) {
     const { tagName, attrs } = node
     const attributes = []
     let pugNode = tagName
@@ -115,7 +110,7 @@ class Parser {
     }
 
     if (attributes.length) {
-      pugNode += `(${attributes.join(', ')})`
+      pugNode += `(${attributes.join(this.separatorType)})`
     }
 
     return pugNode
@@ -190,7 +185,7 @@ class Parser {
    * createElement formats a generic HTML element.
    */
   createElement(node, level) {
-    const pugNode = Parser.getNodeWithAttributes(node)
+    const pugNode = this.getNodeWithAttributes(node)
 
     const value = hasSingleTextNodeChild(node)
       ? node.childNodes[0].value

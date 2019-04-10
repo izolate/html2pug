@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Extend method to merge options with defaults
 - Prettier + ESLint
 - Shorthand for boolean/empty attributes
+- Option `useCommas` for attribute separator
 
 ### Removed
 - Standard code style
