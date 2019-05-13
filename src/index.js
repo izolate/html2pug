@@ -7,6 +7,7 @@ const defaultOptions = {
   isFragment: false,
   useTabs: false,
   useCommas: true,
+  useDoubleQuotes: false,
 
   // html-minifier options
   caseSensitive: true,
@@ -21,10 +22,14 @@ module.exports = (sourceHtml, options = {}) => {
   const opts = { ...defaultOptions, ...options }
   const html = minify(sourceHtml, opts)
 
-  const { isFragment, useTabs, useCommas } = opts
+  const { isFragment, useTabs, useCommas, useDoubleQuotes } = opts
 
   // Parse HTML and convert to Pug
   const documentRoot = isFragment ? parseFragment(html) : parse(html)
-  const pugify = new Pugify(documentRoot, { useTabs, useCommas })
+  const pugify = new Pugify(documentRoot, {
+    useTabs,
+    useCommas,
+    useDoubleQuotes,
+  })
   return pugify.parse()
 }

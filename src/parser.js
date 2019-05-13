@@ -17,16 +17,18 @@ class Parser {
     this.pug = ''
     this.root = root
 
-    const { useTabs, useCommas } = options
+    const { useTabs, useCommas, useDoubleQuotes } = options
 
-    // Tabs or spaces?
-    this.indentType = useTabs ? '\t' : '  '
-    // Comma separate attributes?
-    this.separatorType = useCommas ? ', ' : ' '
+    // Tabs or spaces
+    this.indentStyle = useTabs ? '\t' : '  '
+    // Comma separate attributes
+    this.separatorStyle = useCommas ? ', ' : ' '
+    // Single quotes or double
+    this.quoteStyle = useDoubleQuotes ? '"' : "'"
   }
 
   getIndent(level = 0) {
-    return this.indentType.repeat(level)
+    return this.indentStyle.repeat(level)
   }
 
   parse() {
@@ -103,14 +105,15 @@ class Parser {
         default: {
           // Add escaped single quotes (\') to attribute values
           const val = value.replace(/'/g, "\\'")
-          attributes.push(val ? `${name}='${val}'` : name)
+          const quote = this.quoteStyle
+          attributes.push(val ? `${name}=${quote}${val}${quote}` : name)
           break
         }
       }
     }
 
     if (attributes.length) {
-      pugNode += `(${attributes.join(this.separatorType)})`
+      pugNode += `(${attributes.join(this.separatorStyle)})`
     }
 
     return pugNode

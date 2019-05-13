@@ -153,6 +153,16 @@ test('uses a space to separate attributes', t => {
   t.is(generated, expected)
 })
 
+test('uses double quotes for attribute values', t => {
+  const generated = html2pug('<input type="text" name="foo" />', {
+    isFragment: true,
+    useDoubleQuotes: true,
+  })
+  const expected = 'input(type="text", name="foo")'
+
+  t.is(generated, expected)
+})
+
 test('single quotes in attribute values are escaped', t => {
   const generated = html2pug(
     `<button aria-label="closin&apos;" onclick="window.alert('bye')">close</button>`,
