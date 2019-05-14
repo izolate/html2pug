@@ -8,9 +8,9 @@
   },
   "dependencies": {
     "get-stdin": "^6.0.0",
+    "has-flag": "^4.0.0",
     "html-minifier": "^4.0.0",
-    "parse5": "^5.1.0",
-    "yargs": "^8.0.2"
+    "parse5": "^5.1.0"
   },
   "devDependencies": {
     "ava": "^1.4.1",

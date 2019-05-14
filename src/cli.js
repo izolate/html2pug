@@ -1,54 +1,69 @@
 #!/usr/bin/env node
 
+const hasFlag = require('has-flag')
 const getStdin = require('get-stdin')
-const { argv } = require('yargs')
 const html2pug = require('./')
 const { version } = require('../package.json')
 
-/**
- * Create a help page
- */
-const help = [
-  '\n  Usage: html2pug [options] < [file]\n',
-  '  Options:\n',
-  "    -f, --fragment          Don't wrap output in <html>/<body> tags",
-  '    -t, --tabs              Use tabs instead of spaces',
-  '    -h, --help              Show this page',
-  '    -v, --version           Show version\n',
-  '  Examples:\n',
-  '    # Accept input from file and write to stdout',
-  '    $ html2pug < example.html\n',
-  '    # Or write to a file',
-  '    $ html2pug < example.html > example.pug \n',
-].join('\n')
+// help represents the usage guide
+const help = `
+  html2pug converts HTML to Pug.
 
-/**
- * Convert HTML from stdin to Pug
- */
-async function main({ isFragment, needsHelp, showVersion, useTabs }) {
+  usage:
+    html2pug [options] < [file]
+
+  options:
+    -f, --fragment       Don't wrap in enclosing <html> tag
+    -t, --tabs           Use tabs for indentation
+    -c, --commas         Use commas to separate attributes
+    -d, --double-quotes  Use double quotes for attribute values
+    -h, --help           Show this page
+    -v, --version        Show version
+
+  examples:
+    # write to stdout
+    html2pug < example.html
+
+    # write to file
+    html2pug < example.html > example.pug
+`
+
+// print logs to stdout and exits the process
+const print = (text, exitCode = 0) => {
   /* eslint-disable no-console */
-  const stdin = await getStdin()
-
-  if (showVersion) {
-    return console.log(version)
+  if (exitCode === 1) {
+    console.error(text)
+  } else {
+    console.log(text)
   }
-
-  if (needsHelp || !stdin) {
-    return console.log(help)
-  }
-
-  const pug = html2pug(stdin, { isFragment, useTabs })
-  return console.log(pug)
-
   /* eslint-enable no-console */
+  process.exit(exitCode)
 }
 
-/**
- * Get the CLI options and run program
- */
-main({
-  isFragment: !!(argv.fragment || argv.f),
-  needsHelp: !!(argv.help || argv.h),
-  showVersion: !!(argv.version || argv.v),
-  useTabs: !!(argv.tabs || argv.t),
-})
+// convert uses the stdin as input for the html2pug library
+const convert = async (options = {}) => {
+  const stdin = await getStdin()
+  if (!stdin) {
+    return print(help)
+  }
+  return html2pug(stdin, options)
+}
+
+if (hasFlag('h') || hasFlag('help')) {
+  print(help)
+}
+
+if (hasFlag('v') || hasFlag('version')) {
+  print(version)
+}
+
+const options = {
+  isFragment: hasFlag('f') || hasFlag('fragment'),
+  useTabs: hasFlag('t') || hasFlag('tabs'),
+  useCommas: hasFlag('c') || hasFlag('commas'),
+  useDoubleQuotes: hasFlag('d') || hasFlag('double-quotes'),
+}
+
+convert(options)
+  .then(result => print(result))
+  .catch(err => print(err, 1))

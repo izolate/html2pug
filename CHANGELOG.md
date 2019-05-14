@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [3.1.0] - 2019-05-14
 ### Added
 - Option `useDoubleQuotes` for attribute values
+- Option `commas` to CLI
+
+### Changed
+- Refactored cli.js
 
 ## [3.0.0] - 2019-04-07
 ### Changed
