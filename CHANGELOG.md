@@ -4,14 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [3.1.0] - 2019-05-14
+## [4.0.0] - 2019-05-14
 ### Added
-- Option `useDoubleQuotes` for attribute values
+- Option `doubleQuotes` for attribute values
 - Option `commas` to CLI
 - Travis CI file
 
 ### Changed
 - Refactored cli.js
+- Option `useTabs` to `tabs` (**BREAKING CHANGE**)
+- Option `useCommas` to `commas` (**BREAKING CHANGE**)
+- Option `isFragment` to `fragment` (**BREAKING CHANGE**)
 
 ## [3.0.0] - 2019-04-07
 ### Changed

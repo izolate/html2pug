@@ -63,14 +63,14 @@ See `html2pug --help` for more information.
 const html2pug = require('html2pug')
 
 const html = '<header><h1 class="title">Hello World!</h1></header>'
-const pug = html2pug(html, { useTabs: true })
+const pug = html2pug(html, { tabs: true })
 ```
 
 ### Options
 
 Name | Type | Default | Description
 --- | --- | --- | ---
-`useTabs` | `Boolean` | `false` | Use tabs instead of spaces
-`useCommas` | `Boolean` | `true` | Use commas to separate node attributes
-`useDoubleQuotes` | `Boolean` | `false` | Use double quotes instead of single quotes for attribute values
-`isFragment` | `Boolean` | `false` | Wraps result in enclosing `<html>` and `<body>` tags if false
+`tabs` | `Boolean` | `false` | Use tabs instead of spaces for indentation
+`commas` | `Boolean` | `true` | Use commas to separate node attributes
+`doubleQuotes` | `Boolean` | `false` | Use double quotes instead of single quotes for attribute values
+`fragment` | `Boolean` | `false` | Wraps result in enclosing `<html>` and `<body>` tags if false

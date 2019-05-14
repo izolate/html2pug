@@ -58,10 +58,10 @@ if (hasFlag('v') || hasFlag('version')) {
 }
 
 const options = {
-  isFragment: hasFlag('f') || hasFlag('fragment'),
-  useTabs: hasFlag('t') || hasFlag('tabs'),
-  useCommas: hasFlag('c') || hasFlag('commas'),
-  useDoubleQuotes: hasFlag('d') || hasFlag('double-quotes'),
+  fragment: hasFlag('f') || hasFlag('fragment'),
+  tabs: hasFlag('t') || hasFlag('tabs'),
+  commas: hasFlag('c') || hasFlag('commas'),
+  doubleQuotes: hasFlag('d') || hasFlag('double-quotes'),
 }
 
 convert(options)

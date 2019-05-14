@@ -17,14 +17,14 @@ class Parser {
     this.pug = ''
     this.root = root
 
-    const { useTabs, useCommas, useDoubleQuotes } = options
+    const { tabs, commas, doubleQuotes } = options
 
     // Tabs or spaces
-    this.indentStyle = useTabs ? '\t' : '  '
+    this.indentStyle = tabs ? '\t' : '  '
     // Comma separate attributes
-    this.separatorStyle = useCommas ? ', ' : ' '
+    this.separatorStyle = commas ? ', ' : ' '
     // Single quotes or double
-    this.quoteStyle = useDoubleQuotes ? '"' : "'"
+    this.quoteStyle = doubleQuotes ? '"' : "'"
   }
 
   getIndent(level = 0) {

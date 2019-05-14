@@ -28,8 +28,8 @@ html(lang='en')
   t.is(generated, pug)
 })
 
-test('result contains no outer html element when isFragment is truthy', t => {
-  const generated = html2pug('<h1>Hello World!</h1>', { isFragment: true })
+test('result contains no outer html element when fragment is truthy', t => {
+  const generated = html2pug('<h1>Hello World!</h1>', { fragment: true })
   t.falsy(generated.startsWith('html'))
 })
 
@@ -82,7 +82,7 @@ test('creates multiline block when linebreaks are present', t => {
   line
   string`
 
-  const generated = html2pug(html, { isFragment: true })
+  const generated = html2pug(html, { fragment: true })
   t.is(generated, pug)
 })
 
@@ -90,7 +90,7 @@ test('uses div tag shorthand when id/class is present', t => {
   const html = "<div id='foo' class='bar'>baz</div>"
   const pug = '#foo.bar baz'
 
-  const generated = html2pug(html, { isFragment: true })
+  const generated = html2pug(html, { fragment: true })
   t.is(generated, pug)
 })
 
@@ -111,23 +111,23 @@ test('removes whitespace between HTML elements', t => {
   li three
   li four`
 
-  const generated = html2pug(html, { isFragment: true })
+  const generated = html2pug(html, { fragment: true })
   t.is(generated, pug)
 })
 
 test('does not fail on unicode characters', t => {
   const generated = html2pug('<h1 class="accents">â, é, ï, õ, ù</h1>', {
-    isFragment: true,
+    fragment: true,
   })
   const expected = 'h1.accents â, é, ï, õ, ù'
 
   t.is(generated, expected)
 })
 
-test('uses tabs when useTabs is truthy', t => {
+test('uses tabs when tabs is truthy', t => {
   const generated = html2pug('<div><span>Tabs!</span></div>', {
-    isFragment: true,
-    useTabs: true,
+    fragment: true,
+    tabs: true,
   })
   const expected = 'div\n\tspan Tabs!'
 
@@ -136,7 +136,7 @@ test('uses tabs when useTabs is truthy', t => {
 
 test('uses a comma to separate attributes', t => {
   const generated = html2pug('<input type="text" name="foo" />', {
-    isFragment: true,
+    fragment: true,
   })
   const expected = "input(type='text', name='foo')"
 
@@ -145,8 +145,8 @@ test('uses a comma to separate attributes', t => {
 
 test('uses a space to separate attributes', t => {
   const generated = html2pug('<input type="text" name="foo" />', {
-    isFragment: true,
-    useCommas: false,
+    fragment: true,
+    commas: false,
   })
   const expected = "input(type='text' name='foo')"
 
@@ -155,8 +155,8 @@ test('uses a space to separate attributes', t => {
 
 test('uses double quotes for attribute values', t => {
   const generated = html2pug('<input type="text" name="foo" />', {
-    isFragment: true,
-    useDoubleQuotes: true,
+    fragment: true,
+    doubleQuotes: true,
   })
   const expected = 'input(type="text", name="foo")'
 
@@ -167,7 +167,7 @@ test('single quotes in attribute values are escaped', t => {
   const generated = html2pug(
     `<button aria-label="closin&apos;" onclick="window.alert('bye')">close</button>`,
     {
-      isFragment: true,
+      fragment: true,
     }
   )
   const expected = `button(aria-label='closin\\'', onclick='window.alert(\\'bye\\')') close`
@@ -178,7 +178,7 @@ test('single quotes in attribute values are escaped', t => {
 test('collapses boolean attributes', t => {
   const generated = html2pug(
     `<input type="text" name="foo" disabled="disabled" readonly="readonly" />`,
-    { isFragment: true }
+    { fragment: true }
   )
   const expected = `input(type='text', name='foo', disabled, readonly)`
 

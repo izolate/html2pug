@@ -4,10 +4,10 @@ const Pugify = require('./parser')
 
 const defaultOptions = {
   // html2pug options
-  isFragment: false,
-  useTabs: false,
-  useCommas: true,
-  useDoubleQuotes: false,
+  fragment: false,
+  tabs: false,
+  commas: true,
+  doubleQuotes: false,
 
   // html-minifier options
   caseSensitive: true,
@@ -22,14 +22,14 @@ module.exports = (sourceHtml, options = {}) => {
   const opts = { ...defaultOptions, ...options }
   const html = minify(sourceHtml, opts)
 
-  const { isFragment, useTabs, useCommas, useDoubleQuotes } = opts
+  const { fragment, tabs, commas, doubleQuotes } = opts
 
   // Parse HTML and convert to Pug
-  const documentRoot = isFragment ? parseFragment(html) : parse(html)
-  const pugify = new Pugify(documentRoot, {
-    useTabs,
-    useCommas,
-    useDoubleQuotes,
+  const doc = fragment ? parseFragment(html) : parse(html)
+  const pugify = new Pugify(doc, {
+    tabs,
+    commas,
+    doubleQuotes,
   })
   return pugify.parse()
 }
