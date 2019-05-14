@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Option `useDoubleQuotes` for attribute values
 - Option `commas` to CLI
+- Travis CI file
 
 ### Changed
 - Refactored cli.js
