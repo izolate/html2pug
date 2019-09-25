@@ -28,8 +28,12 @@ class PugNode {
     this.name = name;
     this.value = value;
     this.indentLevel = indentLevel;
-    if (tabs) { this.tabs = tabs; }
-    if (commas) { this.commas = commas; }
+    if (tabs) {
+      this.tabs = tabs;
+    }
+    if (commas) {
+      this.commas = commas;
+    }
   }
 
   /**
@@ -105,9 +109,7 @@ class PugNode {
         const hasClassOrId = this.attributes.some((attr: Attribute) =>
           ['class', 'id'].includes(attr.name),
         );
-        if (hasClassOrId) {
-          return '';
-        }
+        return hasClassOrId ? '' : this.name;
       }
       default:
         return this.name;

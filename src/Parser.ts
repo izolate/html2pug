@@ -1,6 +1,7 @@
 import {
   DefaultTreeCommentNode,
   DefaultTreeDocument,
+  DefaultTreeDocumentType,
   DefaultTreeElement,
   DefaultTreeNode,
   DefaultTreeTextNode,
@@ -73,36 +74,32 @@ class Parser {
       return;
     }
 
-    for (const treeNode of tree) {
-      const node = treeNode as DefaultTreeElement;
-
-      const pugNode = this.parseHtmlNode(node, indentLevel);
+    for (const treeNode of tree as DefaultTreeElement[]) {
+      const pugNode = this.parseHtmlNode(treeNode, indentLevel);
       if (pugNode) {
         this.pug += `\n${pugNode.toString()}`;
       }
 
       if (
-        Array.isArray(node.childNodes) &&
-        node.childNodes.length &&
-        !hasOnlyTextChildNode(node)
+        Array.isArray(treeNode.childNodes) &&
+        treeNode.childNodes.length &&
+        !hasOnlyTextChildNode(treeNode)
       ) {
-        yield* this.walk(node.childNodes, indentLevel + 1);
+        yield* this.walk(treeNode.childNodes, indentLevel + 1);
       }
     }
   }
+
   /**
    * Creates a [PugNode] from a #documentType element.
    *
    * @param indentLevel
    */
-  private createDoctypeNode = (indentLevel: number): PugNode =>
-    new PugNode(
-      Nodes.Doctype,
-      'doctype html',
-      indentLevel,
-      this.tabs,
-      this.commas,
-    );
+  private createDoctypeNode = (
+    node: DefaultTreeDocumentType,
+    indentLevel: number,
+  ): PugNode =>
+    new PugNode(Nodes.Doctype, node.name, indentLevel, this.tabs, this.commas);
 
   /**
    * Creates a [PugNode] from a #comment element.
@@ -142,6 +139,7 @@ class Parser {
    * Converts an HTML element into a [PugNode].
    *
    * @param node
+   * @param indentLevel
    */
   private createElementNode(
     node: DefaultTreeElement,
@@ -178,7 +176,10 @@ class Parser {
   ): PugNode | void {
     switch (node.nodeName) {
       case Nodes.Doctype:
-        return this.createDoctypeNode(indentLevel);
+        return this.createDoctypeNode(
+          node as DefaultTreeDocumentType,
+          indentLevel,
+        );
       case Nodes.Comment:
         return this.createCommentNode(
           node as DefaultTreeCommentNode,
