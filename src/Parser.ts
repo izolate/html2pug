@@ -15,6 +15,7 @@ export enum Nodes {
   Text = '#text',
   Comment = '#comment',
   Div = 'div',
+  Template = 'template',
 }
 
 /**
@@ -81,11 +82,11 @@ class Parser {
       }
 
       if (
-        Array.isArray(treeNode.childNodes) &&
-        treeNode.childNodes.length &&
+        Array.isArray(getChildNodes(treeNode)) &&
+        getChildNodes(treeNode).length &&
         !hasOnlyTextChildNode(treeNode)
       ) {
-        yield* this.walk(treeNode.childNodes, indentLevel + 1);
+        yield* this.walk(getChildNodes(treeNode), indentLevel + 1);
       }
     }
   }
@@ -147,7 +148,7 @@ class Parser {
   ): PugNode {
     let value: string = '';
     if (hasOnlyTextChildNode(node)) {
-      const textNode = node.childNodes[0] as DefaultTreeTextNode;
+      const textNode = getChildNodes(node)[0] as DefaultTreeTextNode;
       value = textNode.value;
     }
 
@@ -286,13 +287,32 @@ class Parser {
 }
 
 /**
+ * Encapsulates template node.
+ */
+interface TemplateNode extends DefaultTreeElement {
+  content: DefaultTreeElement;
+}
+
+/**
+ * Gets child nodes.
+ *
+ * @param element
+ */
+function getChildNodes(element: DefaultTreeElement): DefaultTreeNode[] {
+  return element.nodeName === Nodes.Template
+    ? (element as TemplateNode).content.childNodes
+    : element.childNodes;
+}
+
+
+/**
  * Checks whether a [node] only has a single text child node.
  *
  * @param node
  */
 function hasOnlyTextChildNode(node: DefaultTreeElement): boolean {
-  if (Array.isArray(node.childNodes) && node.childNodes.length === 1) {
-    if (node.childNodes[0].nodeName === Nodes.Text) {
+  if (Array.isArray(getChildNodes(node)) && getChildNodes(node).length === 1) {
+    if (getChildNodes(node)[0].nodeName === Nodes.Text) {
       return true;
     }
   }
