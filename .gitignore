@@ -41,3 +41,6 @@ index.pug
 
 # Vim
 *.swp
+
+# Compiled JS files
+dist/
