@@ -2,7 +2,7 @@
 
 const hasFlag = require('has-flag')
 const getStdin = require('get-stdin')
-const html2pug = require('./')
+const html2pug = require('../dist')
 const { version } = require('../package.json')
 
 // help represents the usage guide
